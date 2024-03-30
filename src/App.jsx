@@ -19,6 +19,10 @@ function App() {
       suite: "",
       city: "",
       zipcode: "",
+      geo: {
+        lat: "",
+        lng: "",
+      },
     },
     company: {
       name: "",
@@ -89,6 +93,10 @@ function App() {
           suite: "",
           city: "",
           zipcode: "",
+          geo: {
+            lat: "",
+            lng: "",
+          },
         },
         company: {
           name: "",
