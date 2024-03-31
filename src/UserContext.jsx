@@ -151,6 +151,7 @@ export const UserProvider = ({ children }) => {
         users,
         handleEdit,
         handleDelete,
+        resetFormData,
       }}
     >
       {children}
