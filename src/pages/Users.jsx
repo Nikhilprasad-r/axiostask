@@ -29,6 +29,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
+          {/* looping through available users to create table rows */}
           {users.map((user) => (
             <Tr key={user.id} user={user} />
           ))}

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import UserContext from "../UserContext";
+import { Link } from "react-router-dom";
 
 const Tr = ({ user }) => {
   const { handleEdit, handleDelete } = useContext(UserContext);
@@ -15,12 +16,13 @@ const Tr = ({ user }) => {
       <td className="px-6 py-4">{user.phone}</td>
       <td className="px-6 py-4">{user.email}</td>
       <td className="px-6 py-4 text-right">
-        <button
+        <Link
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
           onClick={() => handleEdit(user.id)}
+          to="create"
         >
           View/Edit
-        </button>
+        </Link>
       </td>
       <td className="px-6 py-4 text-right">
         <button

@@ -3,15 +3,19 @@ import "./App.css";
 import Form from "./pages/Form";
 import Users from "./pages/Users";
 import { UserProvider } from "./UserContext";
+import Navbar from "./components/Navbar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <UserProvider>
-      <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl text-center">
-        User Management
-      </h1>
-      <Form />
-      <Users />
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/create" element={<Form />} />
+          <Route path="/" element={<Users />} />
+        </Routes>
+      </BrowserRouter>
     </UserProvider>
   );
 };

@@ -1,11 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+
 const API_URL = "https://jsonplaceholder.typicode.com/users";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [editMode, setEditMode] = useState(false);
   const [users, setUsers] = useState([]);
+  // setting default strucuture
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,11 +31,11 @@ export const UserProvider = ({ children }) => {
     },
   });
   const [editingUserId, setEditingUserId] = useState(null);
-
+  // fetching data while the component is loaded first time
   useEffect(() => {
     fetchUsers();
   }, []); // Fetch users every time the users state changes
-
+  // async function to fetch users
   const fetchUsers = async () => {
     try {
       const response = await axios.get(API_URL);
@@ -42,7 +44,7 @@ export const UserProvider = ({ children }) => {
       console.error("Error fetching users:", error);
     }
   };
-
+  // function to handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith("address.")) {
@@ -69,6 +71,8 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // function to add data to api
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -88,7 +92,7 @@ export const UserProvider = ({ children }) => {
       console.error("Error adding/editing user:", error);
     }
   };
-
+  // clearing form after adding or editing
   const resetFormData = () => {
     setFormData({
       name: "",
@@ -113,14 +117,20 @@ export const UserProvider = ({ children }) => {
       },
     });
   };
-
+  // function to handle form editing
   const handleEdit = (id) => {
     const userToEdit = users.find((user) => user.id === id);
-    setFormData({ ...userToEdit });
+    // Ensure user data matches form data structure
+    const formDataForEdit = {
+      ...userToEdit,
+      address: { ...userToEdit.address },
+      company: { ...userToEdit.company },
+    };
+    setFormData(formDataForEdit);
     setEditingUserId(id);
     setEditMode(true);
   };
-
+  // function to handle deleting
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
