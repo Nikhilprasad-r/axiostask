@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://jsonplaceholder.typicode.com/users";
+const mock_api = "https://6608e76ea2a5dd477b14dbe1.mockapi.io/users";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
   // async function to fetch users
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(mock_api);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -77,17 +77,23 @@ export const UserProvider = ({ children }) => {
     e.preventDefault();
     try {
       if (editingUserId) {
-        await axios.put(`${API_URL}/${editingUserId}`, formData);
+        // Update the user data in the API
+        await axios.put(`${mock_api}/${editingUserId}`, formData);
+
+        // Update the local users state
         const updatedUsers = users.map((user) =>
           user.id === editingUserId ? { ...user, ...formData } : user
         );
         setUsers(updatedUsers);
-        setEditingUserId(null);
       } else {
-        const response = await axios.post(API_URL, formData);
+        // Add new user data to the API
+        const response = await axios.post(mock_api, formData);
+
+        // Update the local users state
         setUsers([...users, response.data]);
       }
       resetFormData();
+      setEditingUserId(null);
     } catch (error) {
       console.error("Error adding/editing user:", error);
     }
@@ -133,7 +139,7 @@ export const UserProvider = ({ children }) => {
   // function to handle deleting
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await axios.delete(`${mock_api}/${id}`);
       setUsers(users.filter((user) => user.id !== id));
     } catch (error) {
       console.error("Error deleting user:", error);
