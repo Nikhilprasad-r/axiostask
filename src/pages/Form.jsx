@@ -59,7 +59,7 @@ const Form = () => {
       {editingUserId && (
         <a
           class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-10"
-          href={`https://www.google.com/maps/@${formData.address.geo.lat},${formData.address.geo.lng},3z?entry=ttu`}
+          href={`https://www.google.com/maps/@${formData.address.geo.lat},${formData.address.geo.lng},15z?entry=ttu`}
         >
           Location
         </a>

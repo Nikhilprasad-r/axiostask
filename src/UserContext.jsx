@@ -85,18 +85,119 @@ export const UserProvider = ({ children }) => {
         );
         setUsers(updatedUsers);
       } else {
-        // Add new user data to the API
-        const response = await axios.post(mock_api, formData);
-
-        // Update the local users state
-        setUsers([...users, response.data]);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              const updatedFormData = {
+                ...formData,
+                address: {
+                  ...formData.address,
+                  geo: {
+                    lat: latitude,
+                    lng: longitude,
+                  },
+                },
+              };
+              setFormData(updatedFormData);
+              // Update the local users state
+              axios
+                .post(mock_api, updatedFormData)
+                .then((response) => {
+                  setUsers([
+                    ...users,
+                    {
+                      ...response.data,
+                      address: {
+                        ...response.data.address,
+                        geo: { lat: latitude, lng: longitude },
+                      },
+                    },
+                  ]);
+                  resetFormData();
+                  setEditingUserId(null);
+                })
+                .catch((error) => {
+                  console.error("Error adding user:", error);
+                });
+            },
+            (error) => {
+              console.error("Error getting location:", error);
+              // If location access is denied or Geolocation API is not supported, set lat and lng to 0
+              const updatedFormData = {
+                ...formData,
+                address: {
+                  ...formData.address,
+                  geo: {
+                    lat: 0,
+                    lng: 0,
+                  },
+                },
+              };
+              setFormData(updatedFormData);
+              // Update the local users state with lat and lng as 0
+              axios
+                .post(mock_api, updatedFormData)
+                .then((response) => {
+                  setUsers([
+                    ...users,
+                    {
+                      ...response.data,
+                      address: {
+                        ...response.data.address,
+                        geo: { lat: 0, lng: 0 },
+                      },
+                    },
+                  ]);
+                  resetFormData();
+                  setEditingUserId(null);
+                })
+                .catch((error) => {
+                  console.error("Error adding user:", error);
+                });
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+          // If Geolocation API is not supported, set lat and lng to 0
+          const updatedFormData = {
+            ...formData,
+            address: {
+              ...formData.address,
+              geo: {
+                lat: 0,
+                lng: 0,
+              },
+            },
+          };
+          setFormData(updatedFormData);
+          // Update the local users state with lat and lng as 0
+          axios
+            .post(mock_api, updatedFormData)
+            .then((response) => {
+              setUsers([
+                ...users,
+                {
+                  ...response.data,
+                  address: {
+                    ...response.data.address,
+                    geo: { lat: 0, lng: 0 },
+                  },
+                },
+              ]);
+              resetFormData();
+              setEditingUserId(null);
+            })
+            .catch((error) => {
+              console.error("Error adding user:", error);
+            });
+        }
       }
-      resetFormData();
-      setEditingUserId(null);
     } catch (error) {
       console.error("Error adding/editing user:", error);
     }
   };
+
   // clearing form after adding or editing
   const resetFormData = () => {
     setFormData({
