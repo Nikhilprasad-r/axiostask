@@ -84,6 +84,7 @@ export const UserProvider = ({ children }) => {
           user.id === editingUserId ? { ...user, ...formData } : user
         );
         setUsers(updatedUsers);
+        resetFormData();
       } else {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
@@ -115,7 +116,6 @@ export const UserProvider = ({ children }) => {
                     },
                   ]);
                   resetFormData();
-                  setEditingUserId(null);
                 })
                 .catch((error) => {
                   console.error("Error adding user:", error);
@@ -150,7 +150,6 @@ export const UserProvider = ({ children }) => {
                     },
                   ]);
                   resetFormData();
-                  setEditingUserId(null);
                 })
                 .catch((error) => {
                   console.error("Error adding user:", error);
@@ -186,7 +185,6 @@ export const UserProvider = ({ children }) => {
                 },
               ]);
               resetFormData();
-              setEditingUserId(null);
             })
             .catch((error) => {
               console.error("Error adding user:", error);
@@ -200,6 +198,7 @@ export const UserProvider = ({ children }) => {
 
   // clearing form after adding or editing
   const resetFormData = () => {
+    setEditingUserId(null);
     setFormData({
       name: "",
       email: "",
