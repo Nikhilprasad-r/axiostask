@@ -5,7 +5,6 @@ const mock_api = "https://6608e76ea2a5dd477b14dbe1.mockapi.io/users";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [editMode, setEditMode] = useState(false);
   const [users, setUsers] = useState([]);
   // setting default strucuture
   const [formData, setFormData] = useState({
@@ -134,7 +133,6 @@ export const UserProvider = ({ children }) => {
     };
     setFormData(formDataForEdit);
     setEditingUserId(id);
-    setEditMode(true);
   };
   // function to handle deleting
   const handleDelete = async (id) => {
@@ -153,7 +151,7 @@ export const UserProvider = ({ children }) => {
         handleChange,
         formData,
         handleSubmit,
-        editMode,
+
         users,
         handleEdit,
         handleDelete,
